@@ -1,0 +1,12 @@
+{
+  "name": "peregrinus/potter",
+  "description": "Auto-create .pot translation templates for WordPress plugins",
+  "minimum-stability": "stable",
+  "license": "gpl-3.0+",
+  "authors": [
+    {
+      "name": "Christoph Fischer",
+      "email": "chris@toph.de"
+    }
+  ]
+}
