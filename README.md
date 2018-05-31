@@ -23,5 +23,3 @@ On windows, you would use the following command:
 Potter will figure out the correct name and path for your .pot file from the plugin's metadata,
 most notably "Domain Path" and "Text Domain". It will then scan all php files
 in your plugin's folder and all subfolders and extract all relevant texts.
-
-Note: At this early stage, potter only considers texts called with the __() function.

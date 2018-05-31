@@ -29,10 +29,14 @@ class Potter
     const POTTER_VERSION = '1.0';
 
     protected $keys = [];
-    protected $re = '/__\(([\"\'](?:(?<=\")[^\"\\\\]*(?s:\\\\.[^\"\\\\]*)*\"|(?<=\')[^\'\\\\]*(?s:\\\\.[^\'\\\\]*)*\'))/m';
+    protected $re = '/{{function}}\(([\"\'](?:(?<=\")[^\"\\\\]*(?s:\\\\.[^\"\\\\]*)*\"|(?<=\')[^\'\\\\]*(?s:\\\\.[^\'\\\\]*)*\'))/m';
     protected $pluginName = '';
     protected $pluginData = [];
     protected $pot = '';
+
+    protected $functions = [
+            '__', '_e', 'esc_html_e', 'esc_html__', '_x', '_ex', 'esc_attr_x', 'esc_html_x'
+    ];
 
     /**
      * Output text to console, followed by line feed
@@ -121,10 +125,12 @@ class Potter
         $lineCtr = 0;
         foreach (explode("\n", str_replace("\r", '', file_get_contents($file))) as $line) {
             $lineCtr++;
-            if (preg_match_all($this->re, $line, $matches)) {
-                foreach ($matches[1] as $match) {
-                    $match = substr($match, 1, -1);
-                    $this->keys[$match][] = ['file' => $file, 'line' => $lineCtr];
+            foreach ($this->functions as $function) {
+                if (preg_match_all(str_replace('{{function}}', $function, $this->re), $line, $matches)) {
+                    foreach ($matches[1] as $match) {
+                        $match = substr($match, 1, -1);
+                        $this->keys[$match][] = ['file' => $file, 'line' => $lineCtr];
+                    }
                 }
             }
         }
