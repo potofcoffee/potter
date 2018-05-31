@@ -11,7 +11,7 @@ at this moment, composer still fails to assign the correct permissions on Linux,
 
     chmod +x vendor/peregrinus/potter/potter
     
-##Usage
+## Usage
 Execute the following command in the root directory of your plugin:
 
     vendor/peregrinus/potter/potter
