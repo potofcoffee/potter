@@ -14,7 +14,7 @@
   },
   "scripts": {
     "post-install-cmd": [
-      "chmod +x potter"
+      "php -r \"chmod( __DIR__ . '/potter', 0777);\""
     ]
   }
 }
