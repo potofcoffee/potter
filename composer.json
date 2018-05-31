@@ -13,8 +13,14 @@
     "php": "^7.0"
   },
   "scripts": {
+    "post-root-package-install": [
+      "chmod 777 vendor/peregrinus/potter/potter"
+    ],
     "post-install-cmd": [
-      "php -r \"chmod( __DIR__ . '/potter', 0777);\""
+      "chmod 777 vendor/peregrinus/potter/potter"
+    ],
+    "post-update-cmd": [
+      "chmod 777 vendor/peregrinus/potter/potter"
     ]
   }
 }
