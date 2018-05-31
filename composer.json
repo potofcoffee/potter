@@ -8,5 +8,8 @@
       "name": "Christoph Fischer",
       "email": "chris@toph.de"
     }
-  ]
+  ],
+  "require": {
+    "php": "^7.0"
+  }
 }
