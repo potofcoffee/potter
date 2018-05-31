@@ -29,7 +29,7 @@ class Potter
     const POTTER_VERSION = '1.0';
 
     protected $keys = [];
-    protected $re = '/{{function}}\(([\"\'](?:(?<=\")[^\"\\\\]*(?s:\\\\.[^\"\\\\]*)*\"|(?<=\')[^\'\\\\]*(?s:\\\\.[^\'\\\\]*)*\'))/m';
+    protected $re = '/{{function}}\((?: *)([\"\'](?:(?<=\")[^\"\\\\]*(?s:\\\\.[^\"\\\\]*)*\"|(?<=\')[^\'\\\\]*(?s:\\\\.[^\'\\\\]*)*\'))/m';
     protected $pluginName = '';
     protected $pluginData = [];
     protected $pot = '';
@@ -110,7 +110,7 @@ class Potter
             $this->pluginData = $this->getPluginMetadata($this->pluginName . '.php', []);
             print_r($this->pluginData);
         }
-        $this->pot = realpath('./' . $this->pluginData['DomainPath'] . $this->pluginData['TextDomain'] . '.pot');
+        $this->pot = realpath(getcwd().$this->pluginData['DomainPath'] . $this->pluginData['TextDomain'] . '.pot');
         $this->console('Target file is ' . $this->pot);
 
         if (file_exists($this->pot)) {
@@ -123,6 +123,7 @@ class Potter
     {
         echo $file . "\r\n";
         $lineCtr = 0;
+
         foreach (explode("\n", str_replace("\r", '', file_get_contents($file))) as $line) {
             $lineCtr++;
             foreach ($this->functions as $function) {
