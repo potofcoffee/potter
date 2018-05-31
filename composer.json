@@ -14,7 +14,7 @@
   },
   "scripts": {
     "post-install-cmd": [
-      "chmod +x vendor/peregrinus/potter/potter"
+      "chmod +x potter"
     ]
   }
 }
