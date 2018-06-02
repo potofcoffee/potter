@@ -22,5 +22,10 @@
     "post-update-cmd": [
       "chmod 777 vendor/peregrinus/potter/potter"
     ]
-  }
+  },
+  "autoload": {
+    "psr-4": {
+      "Peregrinus\\Potter\\": "Classes/"
+    }
+  },
 }
