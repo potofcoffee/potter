@@ -21,7 +21,6 @@
 
 namespace Peregrinus\Potter;
 
-
 class PotterEngine
 {
 
@@ -29,7 +28,8 @@ class PotterEngine
     const POTTER_VERSION = '1.0';
 
     protected $keys = [];
-    protected $re = '/{{function}}\((?: *)([\"\'](?:(?<=\")[^\"\\\\]*(?s:\\\\.[^\"\\\\]*)*\"|(?<=\')[^\'\\\\]*(?s:\\\\.[^\'\\\\]*)*\'))/m';
+    protected $regularExpression = '/{{function}}\((?: *)([\"\'](?:(?<=\")[^\"\\\\]*(?s:\\\\.[^\"\\\\]*)*\"'
+    . '|(?<=\')[^\'\\\\]*(?s:\\\\.[^\'\\\\]*)*\'))/m';
     protected $pluginName = '';
     protected $pluginData = [];
     protected $pot = '';
@@ -47,9 +47,9 @@ class PotterEngine
 
     /**
      * Output text to console, followed by line feed
-     * @param $text
+     * @param string $text Text to display
      */
-    protected function console(string $text)
+    protected function console($text)
     {
         echo $text . self::CRLF;
     }
@@ -90,11 +90,11 @@ class PotterEngine
         ];
 
         // We don't need to write to the file, so just open for reading.
-        $fp = fopen($file, 'r');
+        $handle = fopen($file, 'r');
         // Pull only the first 8kiB of the file in.
-        $fileData = fread($fp, 8192);
+        $fileData = fread($handle, 8192);
         // PHP will close file handle, but we are good citizens.
-        fclose($fp);
+        fclose($handle);
         // Make sure we catch CR-only line endings.
         $fileData = str_replace("\r", "\n", $fileData);
         foreach ($allHeaders as $field => $regex) {
@@ -111,10 +111,10 @@ class PotterEngine
     {
         $this->pluginName = basename(getcwd());
         if (!file_exists($this->pluginName . '.php')) {
-            die ('Not a wordpress plugin');
+            die('Not a wordpress plugin');
         } else {
             $this->console('Found WordPress plugin ' . $this->pluginName);
-            $this->pluginData = $this->getPluginMetadata($this->pluginName . '.php', []);
+            $this->pluginData = $this->getPluginMetadata($this->pluginName . '.php');
             print_r($this->pluginData);
         }
         $this->pot = realpath(getcwd() . $this->pluginData['DomainPath'] . $this->pluginData['TextDomain'] . '.pot');
@@ -134,7 +134,7 @@ class PotterEngine
         foreach (explode("\n", str_replace("\r", '', file_get_contents($file))) as $line) {
             $lineCtr++;
             foreach ($this->functions as $function) {
-                if (preg_match_all(str_replace('{{function}}', $function, $this->re), $line, $matches)) {
+                if (preg_match_all(str_replace('{{function}}', $function, $this->regularExpression), $line, $matches)) {
                     foreach ($matches[1] as $match) {
                         $match = substr($match, 1, -1);
                         $this->keys[$match][] = ['file' => $file, 'line' => $lineCtr];
@@ -158,8 +158,6 @@ class PotterEngine
                 $this->doFile($file);
             }
         }
-
-
     }
 
     public function run()
@@ -199,5 +197,4 @@ msgstr ""
         file_put_contents($this->pot, $output);
         $this->console(count($this->keys) . ' strings exported to ' . $this->pot);
     }
-
 }
